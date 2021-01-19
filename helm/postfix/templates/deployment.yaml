@@ -32,32 +32,32 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
           env:
-          - name: MAILNAME
-            value: {{-toYaml .Values.postfix.MAILNAME }}
-          - name: MYNETWORKS
-            value: {{-toYaml .Values.postfix.MYNETWORKS }}
-          - name: LOGOUTPUT
-            value: {{-toYaml .Values.postfix.LOGOUTPUT }}
-          - name: TZ
-            value: {{-toYaml .Values.postfix.TZ }}
-          - name: SIZELIMIT
-            value: {{-toYaml .Values.postfix.SIZELIMIT }}
-          - name: POSTFIX_ADD_MISSING_HEADERS
-            value: {{-toYaml .Values.postfix.POSTFIX_ADD_MISSING_HEADERS }}
-          - name: INET_PROTOCOLS
-            value: {{-toYaml .Values.postfix.INET_PROTOCOLS }}
-          - name: BOUNCE_ADDRESS
-            value: {{-toYaml .Values.postfix.BOUNCE_ADDRESS }}
-          - name: HEADER_CHECKS
-            value: {{-toYaml .Values.postfix.HEADER_CHECKS }}
-          - name: RELAYHOST
-            value: {{-toYaml .Values.postfix.RELAYHOST }}
-          - name: RELAYHOST_AUTH
-            value: {{-toYaml .Values.postfix.RELAYHOST_AUTH }}
-          - name: RELAYHOST_PASSWORDMAP
-            value: {{-toYaml .Values.postfix.RELAYHOST_PASSWORDMAP }}
+            - name: MAILNAME
+              value: "{{ .Values.postfix.MAILNAME }}"
+            - name: MYNETWORKS
+              value: "{{ .Values.postfix.MYNETWORKS }}"
+            - name: LOGOUTPUT
+              value: "{{ .Values.postfix.LOGOUTPUT }}"
+            - name: TZ
+              value: "{{ .Values.postfix.TZ }}"
+            - name: SIZELIMIT
+              value: "{{ .Values.postfix.SIZELIMIT }}"
+            - name: POSTFIX_ADD_MISSING_HEADERS
+              value: "{{ .Values.postfix.POSTFIX_ADD_MISSING_HEADERS }}"
+            - name: INET_PROTOCOLS
+              value: "{{ .Values.postfix.INET_PROTOCOLS }}"
+            - name: BOUNCE_ADDRESS
+              value: "{{ .Values.postfix.BOUNCE_ADDRESS }}"
+            - name: HEADER_CHECKS
+              value: "{{ .Values.postfix.HEADER_CHECKS }}"
+            - name: RELAYHOST
+              value: "{{ .Values.postfix.RELAYHOST }}"
+            - name: RELAYHOST_AUTH
+              value: "{{ .Values.postfix.RELAYHOST_AUTH }}"
+            - name: RELAYHOST_PASSWORDMAP
+              value: "{{ .Values.postfix.RELAYHOST_PASSWORDMAP }}"
           ports:
             - name: smtp
               containerPort: 25

@@ -25,10 +25,12 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -71,9 +73,9 @@ postfix:
   # set this to a legitimate FQDN hostname for this service (required)
   MAILNAME: my.host.local
   # comma separated list of IP subnets that are allowed to relay. Default 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-  MYNETWORKS: '10.0.0.0/8,127.0.0.0/8,172.17.0.0/16,192.0.0.0/8'
+  MYNETWORKS: "10.0.0.0/8,127.0.0.0/8,172.17.0.0/16,192.0.0.0/8"
   # Syslog log file location. eg /var/log/maillog. Default /dev/stdout.
-  LOGOUTPUT: '/dev/stdout'
+  LOGOUTPUT: "/dev/stdout"
   # set timezone. This is used by Postfix to create Received headers. Default UTC.
   TZ: UTC
   # Postfix message_size_limit. Default 15728640.

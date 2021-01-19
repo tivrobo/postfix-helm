@@ -1,0 +1,94 @@
+# Default values for postfix.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: panubo/postfix
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: LoadBalancer
+  port: 25
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# SMTP server details
+# Used by postfix to connect to SMTP server
+postfix:
+  # set this to a legitimate FQDN hostname for this service (required)
+  MAILNAME: my.host.local
+  # comma separated list of IP subnets that are allowed to relay. Default 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+  MYNETWORKS: '10.0.0.0/8,127.0.0.0/8,172.17.0.0/16,192.0.0.0/8'
+  # Syslog log file location. eg /var/log/maillog. Default /dev/stdout.
+  LOGOUTPUT: '/dev/stdout'
+  # set timezone. This is used by Postfix to create Received headers. Default UTC.
+  TZ: UTC
+  # Postfix message_size_limit. Default 15728640.
+  SIZELIMIT: 15728640
+  # add missing headers. Default no
+  POSTFIX_ADD_MISSING_HEADERS: no
+  # IP protocols, eg ipv4 or ipv6. Default all
+  INET_PROTOCOLS: all
+  # Email address to receive delivery failure notifications. Default is to log the delivery failure.
+  BOUNCE_ADDRESS: ""
+  # If "true" activates a set of pre-configured header_checks.
+  HEADER_CHECKS: false
+  # Postfix relayhost. Default ''. (example mail.example.com:25)
+  RELAYHOST: ""
+  # Enable authentication for relayhost. Generally used with RELAYHOST_PASSWORDMAP. Default no.
+  RELAYHOST_AUTH: no
+  # relayhost password map in format: RELAYHOST_PASSWORDMAP=mail1.example.com:user1:pass2,mail2.example.com:user2:pass2
+  RELAYHOST_PASSWORDMAP: ""

@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "postfix.fullname" . }}
+  labels:
+    {{- include "postfix.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "postfix.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "postfix.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "postfix.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: MAILNAME
+            value: {{ .Values.postfix.MAILNAME }}
+          - name: MYNETWORKS
+            value: {{ .Values.postfix.MYNETWORKS }}
+          - name: LOGOUTPUT
+            value: {{ .Values.postfix.LOGOUTPUT }}
+          - name: TZ
+            value: {{ .Values.postfix.TZ }}
+          - name: SIZELIMIT
+            value: {{ .Values.postfix.SIZELIMIT }}
+          - name: POSTFIX_ADD_MISSING_HEADERS
+            value: {{ .Values.postfix.POSTFIX_ADD_MISSING_HEADERS }}
+          - name: INET_PROTOCOLS
+            value: {{ .Values.postfix.INET_PROTOCOLS }}
+          - name: BOUNCE_ADDRESS
+            value: {{ .Values.postfix.BOUNCE_ADDRESS }}
+          - name: HEADER_CHECKS
+            value: {{ .Values.postfix.HEADER_CHECKS }}
+          - name: RELAYHOST
+            value: {{ .Values.postfix.RELAYHOST }}
+          - name: RELAYHOST_AUTH
+            value: {{ .Values.postfix.RELAYHOST_AUTH }}
+          - name: RELAYHOST_PASSWORDMAP
+            value: {{ .Values.postfix.RELAYHOST_PASSWORDMAP }}
+          ports:
+            - name: smtp
+              containerPort: 25
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
